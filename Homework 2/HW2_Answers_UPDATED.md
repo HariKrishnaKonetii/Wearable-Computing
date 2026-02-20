@@ -29,7 +29,7 @@
 - Used for seasonality (Repeated Measures ANOVA).
 ---
 
-# INF632 Homework 2 — Answers (Application of your Functions)
+# EE599 Homework 2 — Answers (Application of Functions)
 Name: Hari Krishna Koneti
 
 ## 1) Daily Steps (ActiGraph)
