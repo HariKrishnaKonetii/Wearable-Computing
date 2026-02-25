@@ -1,0 +1,77 @@
+\documentclass[journal]{IEEEtran}
+
+% --- Packages commonly used in IEEE papers ---
+\usepackage{amsmath}
+\usepackage{cite}
+\usepackage{hyperref}
+
+\begin{document}
+
+% Title (Title Case per IEEE template guidance)
+\title{PostureSense: A Single-Accelerometer Wearable for Sleep Lying Position Detection}
+
+% Author block (simple class-project style)
+\author{Hari~Krishna~Koneti%
+\thanks{H. K. Koneti is with the Department of Electrical Engineering, Northern Arizona University, Flagstaff, AZ, USA. (e-mail: \texttt{your.email@nau.edu}).}%
+}
+
+\maketitle
+
+\begin{abstract}
+Sleep position contributes greatly to respiration, pressure injury and sleep quality. Clinical evidence demonstrates that supine sleeping position may aggravate the symptoms of obstructive sleep apnea (OSA) and become more severe in snoring. The existing posture monitoring systems usually use polysomnography (PSG), multi-sensor arrangements or the use of pressure-beds, which are costly and infeasible on a long term basis at home. New wearable studies show that one can determine body orientation using the triaxial accelerometer measurements of gravity. This paper reviews the state of the art in sleep posture detection and identifies a research gap for a small, single-sensor embedded wearable capable of classifying supine, prone, left lateral, and right lateral positions. PostureSense is the proposed project, which intends to apply a low-cost orientation detection system based on accelerometers, applicable to at-home sleep posture monitoring and positional therapy.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Accelerometer, body orientation, embedded systems, positional therapy, sleep posture detection, wearable devices.
+\end{IEEEkeywords}
+
+\section{Introduction}
+Sleep position has clinical significance for respiratory functioning and long-term health outcomes. Positional obstructive sleep apnea (OSA) is defined by greater apnea severity in the supine position than in lateral positions. In addition, pressure ulcer prevention research emphasizes routine body repositioning during prolonged bed rest. Regardless of these consequences, routine monitoring of sleep posture is often restricted to laboratory settings using polysomnography (PSG), video recording, or multi-sensor systems.
+
+Wearable inertial measurement units (IMUs), especially accelerometers, provide a viable option for detecting body orientation. Because gravity provides a constant acceleration vector, static accelerometer measurements can be used to determine orientation relative to Earth. This principle enables classification of lying position with minimal hardware. This literature review summarizes the current state of sleep posture detection research and motivates a wearable system using only a single accelerometer.
+
+\section{Current State of the Art}
+Numerous sensing methods have been explored for sleep posture monitoring, including pressure-sensitive mats, multiple IMUs, and clinical PSG-integrated position sensors. While these systems can be accurate, they increase cost and complexity.
+
+Alinia and Ghasemzadeh developed a pervasive lying posture tracking system based on accelerometer-related sensing and evaluated classification algorithms for supine and lateral positions \cite{alinia2020}. Their work showed that body orientation can be determined using gravitational components measured by a single inertial sensor. The authors also discuss sensor placement tradeoffs and usability, emphasizing that minimal-sensor solutions can improve comfort and practicality. This study demonstrates the feasibility of single-sensor posture detection while highlighting design issues related to placement robustness and embedded implementation.
+
+Jeng \textit{et al.} developed a wrist-worn sleep posture monitoring system and showed that accelerometer data from a wrist-worn device can be used to recognize sleep positions in home-care environments \cite{jeng2021}. The study emphasizes ease of wear and sustained usability, supporting low-cost wearable deployment. Although their approach may involve additional processing, the results support the idea that wrist inertial sensing can differentiate typical sleep postures.
+
+Razjouyan \textit{et al.} compared posture and body acceleration data with conventional wrist actigraphy and PSG in sleep quality assessment \cite{razjouyan2017}. Their results indicated that incorporating positional data improved sleep--wake estimation compared with wrist acceleration alone. This provides clinical motivation for posture detection during sleep, showing that body position contains useful physiological information beyond general motion.
+
+In addition, positional therapy literature suggests that reducing time spent in the supine position can reduce apnea severity in patients with positional OSA. However, many positional therapy systems are bulky or rely on multi-sensor setups, creating an opportunity for simpler embedded designs focused on orientation detection and logging.
+
+\section{Identified Research Gap}
+The reviewed literature indicates that: (1) sleep posture influences respiratory and sleep outcomes; (2) accelerometer-based orientation detection is feasible; and (3) many existing systems rely on multi-sensor or clinically integrated configurations.
+
+Despite these advances, a transparent, single-accelerometer embedded system aimed at low-cost, at-home posture classification and training remains needed. Many prior efforts emphasize algorithmic complexity or clinical integration rather than minimal hardware implementation. Therefore, a simple wearable that classifies four primary lying positions using gravitational tilt estimation represents an important and feasible project direction.
+
+\section{Proposed Project Direction}
+The proposed PostureSense system will use an ESP32 microcontroller and an MPU6050 triaxial accelerometer in a battery-powered wearable form factor. Orientation will be determined by computing tilt angles from accelerometer axes and applying threshold-based rules to classify:
+\begin{itemize}
+    \item Supine (lying on back)
+    \item Prone (lying on stomach)
+    \item Left lateral
+    \item Right lateral
+\end{itemize}
+
+Evaluation will include controlled position trials and overnight trials to assess classification accuracy and time spent in each posture.
+
+\section{Conclusion}
+Existing studies support both the feasibility and clinical importance of sleep posture detection using wearable accelerometers. However, many implementations rely on complex or multi-sensor configurations. This project proposes a low-cost, single-sensor wearable that classifies lying postures using gravitational orientation principles. By prioritizing simplicity, affordability, and embedded feasibility, the proposed work targets a practical gap in home-based sleep posture monitoring.
+
+% ---------------- References ----------------
+\begin{thebibliography}{1}
+
+\bibitem{alinia2020}
+P.~Alinia and H.~Ghasemzadeh, ``Pervasive lying posture tracking,'' \emph{Sensors}, vol.~20, no.~20, 2020.
+
+\bibitem{jeng2021}
+P.-Y.~Jeng, C.-H.~Chou, Y.-H.~Lin, and S.-C.~Huang, ``A wrist sensor sleep posture monitoring system,'' \emph{Sensors}, vol.~21, no.~1, 2021.
+
+\bibitem{razjouyan2017}
+J.~Razjouyan \textit{et al.}, ``Improving sleep quality assessment using wearable sensors by including information from postural/sleep position changes and body acceleration,'' \emph{J. Clin. Sleep Med.}, vol.~13, no.~11, pp.~1301--1310, 2017.
+
+\end{thebibliography}
+
+\end{document}
