@@ -1,0 +1,123 @@
+\documentclass[10pt,journal]{IEEEtran}
+
+\usepackage{cite}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{url}
+
+\title{PostureSense: A Single-Accelerometer Wearable for Sleep Lying Position Detection}
+
+\author{Hari Krishna Koneti
+\thanks{EE599 Wearable Computing Project, Northern Arizona University}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Sleep posture plays an important role in respiratory health, sleep quality, and the severity of sleep disorders such as obstructive sleep apnea (OSA). Traditional posture monitoring systems often rely on polysomnography, pressure-sensitive beds, or multi-sensor wearable systems, which can be expensive and impractical for long-term home monitoring. This project proposes PostureSense, a minimal embedded wearable system that uses a single triaxial accelerometer to classify four primary sleep lying positions: supine, prone, left lateral, and right lateral. By leveraging gravitational tilt estimation from static acceleration measurements, the system aims to provide accurate posture classification while maintaining low hardware complexity and cost. The proposed research investigates whether a single-sensor wearable can achieve clinically meaningful posture detection performance comparable to more complex systems.
+\end{abstract}
+
+\section{Introduction}
+
+Sleep posture significantly influences respiratory function, sleep quality, and long-term health outcomes. In particular, the supine sleeping position has been associated with increased severity of obstructive sleep apnea (OSA) and snoring. Monitoring sleep posture can therefore provide valuable insights into sleep health and help guide positional therapy strategies.
+
+Existing posture monitoring methods often rely on polysomnography (PSG), pressure-sensitive beds, or multi-sensor wearable systems. While these approaches can provide high accuracy, they are typically costly and impractical for long-term monitoring in home environments. Recent advances in wearable sensing technologies suggest that body orientation can be inferred using triaxial accelerometers, which measure the gravitational acceleration vector when the body is stationary.
+
+Because gravity provides a constant reference vector, static accelerometer measurements can be used to estimate device orientation relative to the Earth. This principle enables classification of body posture using minimal sensing hardware. Prior studies have demonstrated the feasibility of accelerometer-based posture detection, but many implementations rely on multiple sensors or complex sensing systems.
+
+This project proposes a minimal embedded wearable system that uses a single accelerometer to detect sleep posture. By focusing on simplicity and affordability, the system aims to enable practical long-term monitoring of sleep position in home settings.
+
+\section{Research Questions and Hypotheses}
+
+\subsection{Primary Research Question}
+
+Can a minimal embedded wearable system using a single triaxial accelerometer accurately classify four primary sleep lying positions (supine, prone, left lateral, and right lateral) using static gravitational tilt estimation?
+
+\subsection{Hypothesis 1 (Primary)}
+
+A single-accelerometer wearable system will classify four primary lying positions with $\geq 90\%$ overall accuracy and Cohen's $\kappa \geq 0.85$ relative to ground-truth labels obtained during controlled validation trials.
+
+\textbf{Expected Result:}
+
+Controlled trials will demonstrate high classification performance (accuracy $\geq 90\%$, class-wise sensitivity $\geq 0.90$), indicating strong agreement beyond chance and reliable orientation detection using static gravitational components.
+
+\textbf{Alternative Result:}
+
+Performance may fall below the predefined threshold due to sensor placement variability, transitional postures, or inter-subject anatomical differences affecting gravitational vector alignment.
+
+\textbf{Interpretation:}
+
+If supported, this result will demonstrate that a minimal embedded wearable using a single accelerometer can provide accurate sleep posture classification, addressing the need for low-cost home monitoring systems.
+
+\subsection{Secondary Research Question 1}
+
+Can a single-sensor posture detection system reliably quantify clinically relevant supine exposure during overnight sleep monitoring?
+
+\subsection{Hypothesis 2}
+
+The wearable system will quantify time spent in the supine position with sufficient measurement stability to detect statistically significant inter-subject variability ($p < 0.05$).
+
+\textbf{Expected Result:}
+
+Overnight recordings will reveal measurable differences in the percentage of total sleep time spent in the supine posture across participants.
+
+\textbf{Alternative Result:}
+
+Supine exposure may not significantly differ across subjects, potentially due to limited variability in sleep behavior or insufficient classification sensitivity.
+
+\textbf{Interpretation:}
+
+If validated, the system will provide a useful metric for evaluating positional risk factors associated with obstructive sleep apnea.
+
+\subsection{Secondary Research Question 2}
+
+Does a threshold-based orientation algorithm using static accelerometer measurements achieve performance comparable to more complex multi-sensor posture detection systems reported in literature?
+
+\subsection{Hypothesis 3}
+
+A rule-based gravitational tilt classification algorithm using a single accelerometer will achieve $\geq 85\%$ accuracy, comparable to the lower bound of performance reported for multi-sensor wearable posture detection systems.
+
+\textbf{Expected Result:}
+
+System performance will fall within previously reported ranges for wearable posture monitoring technologies.
+
+\textbf{Alternative Result:}
+
+Accuracy may be lower than multi-sensor systems, suggesting that additional sensing modalities such as gyroscopes may be necessary for improved robustness.
+
+\textbf{Interpretation:}
+
+This hypothesis evaluates whether hardware simplification can maintain clinically meaningful performance while reducing system complexity and cost.
+
+\section{Methodological Framework}
+
+The proposed PostureSense system integrates an MPU6050 triaxial accelerometer with an ESP32 microcontroller in a battery-powered wearable configuration. Static acceleration vectors corresponding to gravity will be used to compute roll and pitch angles. Posture classification will be performed using threshold-based rules derived from gravitational tilt geometry.
+
+\subsection{Controlled Validation Trials}
+
+Participants will assume predefined positions while ground truth is recorded. Performance metrics will include overall classification accuracy, class-wise sensitivity and specificity, confusion matrices, and Cohen's $\kappa$ coefficient.
+
+\subsection{Overnight Monitoring Trials}
+
+Participants will wear the device during overnight sleep monitoring. Posture duration, positional transitions, and longest continuous supine duration will be recorded. Statistical comparisons across participants will be performed using ANOVA or nonparametric equivalents depending on data distribution.
+
+\section{Conclusion}
+
+This work investigates whether a minimal embedded wearable system using a single accelerometer can accurately detect sleep posture. If successful, the proposed approach could enable practical and affordable long-term sleep posture monitoring in home environments while maintaining clinically meaningful accuracy.
+
+\begin{thebibliography}{1}
+
+\bibitem{sleep1}
+P. Alinia and H. Ghasemzadeh, ``Pervasive lying posture tracking,'' \textit{Sensors}, vol. 20, no. 20, 2020.
+
+\bibitem{sleep2}
+P. Y. Jeng, C. H. Chou, Y. H. Lin, and S. C. Huang, ``A wrist sensor sleep posture monitoring system,'' \textit{Sensors}, vol. 21, no. 1, 2021.
+
+\bibitem{sleep3}
+J. Razjouyan et al., ``Improving sleep quality assessment using wearable sensors by including information from postural/sleep position changes and body acceleration,'' \textit{Journal of Clinical Sleep Medicine}, vol. 13, no. 11, pp. 1301--1310, 2017.
+
+\end{thebibliography}
+
+\end{document}
