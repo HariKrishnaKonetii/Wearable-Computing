@@ -1,0 +1,6 @@
+change_point_index,date,gain,mean_before,mean_after,difference_after_minus_before,interpretation
+198,2013-07-15,121525893.16,5981.57,2932.93,-3048.64,Activity decreases after this date.
+212,2013-07-29,131160454.47,2932.93,8522.84,5589.91,Activity increases after this date.
+231,2013-08-18,465833519.59,8522.84,4270.26,-4252.58,Activity decreases after this date.
+429,2014-06-25,395324279.84,4270.26,191.26,-4079.0,Activity decreases after this date.
+456,2014-08-29,115765263.84,191.26,5571.51,5380.25,Activity increases after this date.
