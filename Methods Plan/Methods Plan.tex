@@ -1,0 +1,179 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\begin{document}
+
+\title{Wearable Accelerometer-Based Sleep Posture Classification}
+
+\author{
+\IEEEauthorblockN{Hari Krishna Koneti}
+\IEEEauthorblockA{
+}
+}
+
+\maketitle
+
+\section{Methods}
+
+\subsection{Overview}
+
+This study presents a wearable sensing framework for sleep posture classification using a tri-axial accelerometer. The objective is to classify four static body orientations: supine, prone, left lateral, and right lateral, based on gravity-induced acceleration patterns. A single-subject feasibility study is conducted to validate the sensing system, data acquisition pipeline, and classification approach. The methodology is designed to ensure replicability, controlled data acquisition, and quantifiable measurement. This work demonstrates that static human posture can be effectively inferred using low-frequency accelerometer data by leveraging gravity-based orientation features.
+
+\subsection{Participant}
+
+The study is conducted as a single-subject feasibility study ($N = 1$). The participant assumes and maintains the four target postures: supine, prone, left lateral, and right lateral. The single participant corresponds to the system developer, enabling controlled and consistent data acquisition.
+
+This design is appropriate for a pilot feasibility study, where the primary objective is system validation rather than population-level inference. The study is limited in generalizability due to the single-subject design. Participation is voluntary, and no personally identifiable information is recorded. The study involves minimal risk as it consists only of noninvasive posture monitoring.
+
+\subsection{Apparatus and System Implementation}
+
+The wearable sensing system consists of an Arduino Uno R3 microcontroller interfaced with an ADXL345 tri-axial accelerometer using I\textsuperscript{2}C communication. The accelerometer is configured with a measurement range of $\pm 16g$.
+
+Acceleration is measured along three orthogonal axes:
+\begin{equation}
+(a_x, a_y, a_z)
+\end{equation}
+
+Acceleration values are measured in units of $g$.
+
+The Arduino program acquires sensor data using the ADXL345 library and logs the following variables:
+\begin{itemize}
+    \item Time (milliseconds, using \texttt{millis()})
+    \item X-axis acceleration
+    \item Y-axis acceleration
+    \item Z-axis acceleration
+\end{itemize}
+
+A fixed delay of 6000 ms is introduced between consecutive samples, resulting in an effective sampling rate of approximately $0.167$ Hz. The sensor is mounted on the chest (sternum region) to ensure consistent orientation measurement relative to gravity.
+
+\subsection{Dataset Description}
+
+The dataset consists of approximately 330 samples of tri-axial acceleration data stored in an Excel file. Each record contains:
+\begin{itemize}
+    \item Time (ms)
+    \item X-axis acceleration
+    \item Y-axis acceleration
+    \item Z-axis acceleration
+\end{itemize}
+
+Data are collected sequentially for four posture classes: supine, prone, left lateral, and right lateral. Each posture is recorded for approximately 4 minutes, resulting in multiple samples per posture class. The raw dataset initially contains non-data rows and repeated headers, which are removed during preprocessing.
+
+\subsection{Experimental Procedure}
+
+\subsubsection{Controlled Data Collection}
+
+Data collection is performed under controlled conditions. Each posture is assumed individually while the wearable device records acceleration data.
+
+The procedure consists of:
+\begin{enumerate}
+    \item Initializing the sensing system
+    \item Placing the sensor at a fixed chest location
+    \item Assuming a specified posture
+    \item Recording acceleration data for a fixed duration
+    \item Repeating the process for all postures
+\end{enumerate}
+
+Since the postures are static, the recorded acceleration primarily reflects gravitational projection along the sensor axes.
+
+\subsubsection{Data Labeling}
+
+Posture labels are assigned based on the known sequence of data collection:
+\begin{itemize}
+    \item Segment 1: Supine
+    \item Segment 2: Prone
+    \item Segment 3: Left lateral
+    \item Segment 4: Right lateral
+\end{itemize}
+
+\subsection{Data Preprocessing}
+
+The dataset is preprocessed prior to analysis. The following steps are performed:
+\begin{enumerate}
+    \item Removal of non-numeric rows and repeated headers
+    \item Standardization of column names
+    \item Conversion of all values to numeric format
+    \item Verification of sampling interval consistency
+    \item Segmentation into posture-specific subsets
+\end{enumerate}
+
+\subsection{Measurement and Feature Extraction}
+
+The primary measurements consist of tri-axial acceleration values $(a_x, a_y, a_z)$, which represent the projection of gravitational acceleration onto the sensor axes.
+
+The measured acceleration components correspond to projections of the gravitational vector:
+\begin{equation}
+a_x = g \cos(\theta_x), \quad a_y = g \cos(\theta_y), \quad a_z = g \cos(\theta_z)
+\end{equation}
+
+where $g$ is gravitational acceleration and $\theta_x, \theta_y, \theta_z$ represent orientation angles relative to each axis.
+
+Because the postures are static, dynamic acceleration components are negligible, and the measured signal is dominated by gravity. Therefore, posture classification is formulated as an orientation estimation problem in a three-dimensional feature space.
+
+The feature space is represented by mean acceleration components in $\mathbb{R}^3$, where each posture forms a distinct cluster corresponding to a specific gravity vector orientation.
+
+The following features are extracted:
+\begin{itemize}
+    \item Mean acceleration along each axis
+    \item Signal magnitude vector (SMV)
+\end{itemize}
+
+\begin{equation}
+SMV = \sqrt{a_x^2 + a_y^2 + a_z^2}
+\end{equation}
+
+Each posture produces a distinct orientation of the gravity vector:
+\begin{itemize}
+    \item Supine: gravity aligned with the Z-axis
+    \item Prone: inverted Z-axis relative to supine
+    \item Left lateral: gravity shifted toward the X-axis
+    \item Right lateral: opposite X-axis direction
+\end{itemize}
+
+These differences enable clear separability in feature space, where clusters corresponding to different postures exhibit minimal overlap. These properties ensure that posture classification can be reliably performed using low-dimensional feature representations.
+
+\subsection{Statistical Analysis and Classification}
+
+Classification is performed using the K-Nearest Neighbors (KNN) algorithm with Euclidean distance as the similarity metric.
+
+Given that posture classes correspond to distinct orientation-dependent clusters with low intra-class variance and high inter-class separation, a distance-based classifier such as KNN is well-suited for this problem.
+
+The classification process includes feature extraction, feature vector construction, and distance-based classification.
+
+Performance is evaluated using classification accuracy and a confusion matrix, providing quantitative assessment of class separability and model effectiveness.
+
+\subsection{Control, Validity, and Limitations}
+
+Control is maintained through fixed sensor placement, controlled posture acquisition, and consistent sampling intervals.
+
+Although the sampling rate is low (approximately $0.167$ Hz), it is sufficient because the signal of interest corresponds to quasi-static orientation, where temporal variation is minimal and high-frequency sampling is not required.
+
+Internal validity is high due to controlled experimental conditions. External validity is limited due to the single-subject design.
+
+Limitations include:
+\begin{itemize}
+    \item Low sampling frequency
+    \item Lack of transition detection
+    \item Limited dataset size
+\end{itemize}
+
+Additional sources of error include sensor noise, quantization effects, and potential bias in accelerometer calibration.
+
+\subsection{Replicability and Reliability}
+
+Replicability is ensured through detailed documentation of hardware configuration, data acquisition code, and preprocessing steps. Reliability is supported by consistent sampling intervals and stable acceleration measurements across postures.
+
+\subsection{Pilot Study and Feasibility}
+
+A pilot study is conducted to validate the sensing system and confirm that posture classes can be distinguished based on accelerometer data. The pilot study confirms that each posture produces a consistent and distinguishable acceleration signature, validating sensor placement and feature-based classification feasibility.
+
+\subsection{Ethical Considerations}
+
+The study involves a single participant and consists of noninvasive posture monitoring. No personally identifiable information is collected, and the study poses minimal risk.
+
+\subsection{Summary}
+
+A wearable accelerometer-based system is developed for four-class sleep posture classification. Data are collected under controlled conditions, preprocessed, and analyzed using feature-based classification. The methodology ensures measurement accuracy, replicability, and feasibility for future expansion.
+
+\end{document}
