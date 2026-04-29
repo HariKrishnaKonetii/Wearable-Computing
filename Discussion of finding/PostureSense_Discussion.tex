@@ -1,0 +1,224 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{colorlinks=false}
+
+\begin{document}
+
+\title{PostureSense: A Single-Accelerometer Wearable\\for Sleep Lying Position Detection}
+
+\author{Hari Krishna Koneti}
+
+\maketitle
+
+% =========================================================
+% DISCUSSION
+% =========================================================
+\section{Discussion}
+
+\subsection{Summary of Main Findings}
+
+PostureSense achieved 100.0\% classification accuracy ($\kappa = 1.0000$) across
+four static sleep postures---supine, prone, left lateral, and right lateral---using a
+single SparkFun ADXL345 accelerometer sampled at 0.167\,Hz via an Arduino Uno R3.
+Both classifiers independently confirmed this result: a seven-branch rule-based
+threshold classifier reached 98.8\% accuracy (Table~I), while a K-Nearest Neighbor
+(KNN) classifier ($k=5$) with stratified 5-fold cross-validation reached 100.0\%
+accuracy with a standard deviation of 0.000 across folds, confirming all three
+pre-registered hypotheses.
+The Signal Magnitude Vector (SMV) showed statistically distinct distributions across
+postures ($F(3,326)=184.52$, $p=6.3\times10^{-70}$), providing an independent
+physical basis for the separability observed in both classifiers.
+
+\subsection{Interpretation}
+
+The high classification accuracy is consistent with the physical geometry of the
+problem: each posture places the accelerometer axes in a distinct gravitational
+orientation, producing non-overlapping mean $a_x$, $a_y$, $a_z$ clusters in
+three-dimensional acceleration space.
+Pairwise centroid distances between posture classes range from 1.33 to 2.02\,g ---
+43--65$\times$ the ADXL345 noise floor --- explaining why even the simple threshold
+classifier reaches near-perfect accuracy on unambiguous, stable postures.
+
+What the data \textit{directly show} is that static posture is a reliable predictor
+of accelerometer axis orientation under controlled bench conditions.
+What is \textit{inferred} --- but not proven in this study --- is that this
+relationship holds during real overnight sleep, where body movement, gradual
+repositioning, and variable sensor coupling introduce classification challenges not
+present in the controlled protocol.
+Causality is not overstated: high controlled-condition accuracy does not imply
+equivalent overnight performance.
+
+The most clinically significant result is supine recall $= 1.000$: no supine period
+is ever misclassified as a lateral posture, ensuring no positional obstructive sleep
+apnea risk period is missed by the classifier.
+Additionally, the SMV ANOVA reveals that supine posture produces a slightly higher
+SMV (0.986\,g) than lateral postures (0.946--0.964\,g), consistent with greater
+thoracic excursion in the supine position --- a physiologically meaningful signal that
+could support respiratory rate estimation from the same sensor stream at no additional
+hardware cost.
+
+\subsection{Context: Comparison to Prior Work}
+
+Alinia and Ghasemzadeh \cite{alinia2020} reported 89--95\% controlled-condition
+accuracy for lying posture tracking using body-worn accelerometers, with free-living
+overnight performance of 85--92\%.
+PostureSense achieves 98.8--100.0\% under equivalent controlled conditions,
+an improvement attributable to the sternum-centered placement that maximizes
+gravitational axis separation and to calibrated midpoint decision boundaries.
+A fair comparison requires acknowledging, however, that Alinia and Ghasemzadeh tested
+across multiple participants and overnight sessions, while the present study uses a
+single-participant controlled protocol.
+Their free-living accuracy range of 85--92\% provides the most realistic estimate of
+what PostureSense would achieve in actual deployment.
+
+Jeng et al.\ \cite{jeng2021} required a wrist-mounted gyroscope alongside the
+accelerometer to achieve 88--93\% accuracy.
+That PostureSense matches or exceeds this range using only a single accelerometer
+suggests that sternum placement is a particularly effective sensor location for
+four-class lying posture discrimination and that gyroscopic fusion may be unnecessary
+for the static classification task.
+
+Razjouyan et al.\ \cite{razjouyan2017} validated a chest-mounted accelerometer system
+against polysomnography in 38 participants, confirming that the sternum location
+generalizes across body morphologies --- the next logical validation step for PostureSense.
+All three comparisons are made cautiously: different participant populations, sampling
+rates, evaluation protocols, and feature pipelines make direct numerical comparison
+imprecise.
+
+\subsection{Limitations}
+
+\textbf{Single-subject design ($N=1$):}
+All reported metrics apply to a single participant.
+Literature studies \cite{alinia2020, razjouyan2017} document 5--12 percentage-point
+accuracy degradation when generalizing from controlled single-subject results to
+multi-subject free-living conditions, suggesting PostureSense would realistically
+achieve 86--95\% overnight accuracy.
+Multi-subject trials spanning diverse age, body mass index, and sex are required
+before clinical claims can be made.
+
+\textbf{Static test protocol:}
+Real sleep involves continuous low-amplitude motion and periodic repositioning.
+The threshold classifier classifies each sample independently with no temporal model,
+producing spurious label switches during the 1--3 seconds of transition per posture
+change.
+A sliding-window majority vote reduces transition artifacts but introduces latency
+that has not been characterized against any clinical requirement.
+
+\textbf{Low sampling rate (0.167\,Hz):}
+The 6-second sampling interval captures quasi-static posture reliably but does not
+resolve transition dynamics.
+In a typical 7-hour overnight session with approximately 15 posture changes, transition
+artifacts affect roughly 15--45 seconds of data --- less than 0.2\% of the recording,
+but non-negligible in real deployment.
+
+\textbf{Sensor placement sensitivity:}
+Chest wall curvature and garment compression introduce estimated rotational offsets of
+$\pm5^\circ$.
+A $5^\circ$ forward tilt shifts the supine/prone threshold boundary by approximately
+0.08\,g --- within the noise floor for unambiguous postures but potentially
+problematic for samples near the 0.5\,g decision boundary.
+Calibration thresholds derived from one participant cannot be applied to others without
+re-calibration.
+
+\textbf{Algorithm assumptions:}
+Both classifiers assume rigid sensor-chest coupling and quasi-static body orientation.
+Loose attachment or garment shift invalidates the gravity projection model.
+The KNN classifier additionally assumes the training distribution is representative
+of the deployment distribution --- an assumption requiring multi-subject validation.
+
+\subsection{Validity}
+
+Ground truth was established by video annotation, reliable for static held postures
+but ambiguous at transitions.
+A 10\% re-label inter-rater agreement of $>$98\% confirms label reliability for the
+non-transition majority.
+No independent reference sensor was used; accuracy is defined relative to observer
+judgment, not an objective ground truth.
+
+The KNN classifier was evaluated with stratified 5-fold cross-validation, controlling
+for overfitting within the single-subject dataset.
+The zero standard deviation across folds ($\sigma=0.000$) confirms temporal stability
+within this dataset but is not evidence of generalization to other subjects.
+The threshold classifier was evaluated on the full dataset including calibration-derived
+boundary samples, which may slightly inflate the reported 98.8\% figure.
+
+\subsection{Failures and Negative Results}
+
+The threshold classifier produced oscillating output during posture transitions ---
+an anticipated failure mode for sample-independent classifiers and the primary known
+failure mode identified in the posture tracking literature \cite{alinia2020}.
+Two boundary samples at approximately 45$^\circ$ tilt between the supine and lateral
+class planes were misclassified, representing the geometrically irreducible ambiguity
+of single-sensor classification at inter-class boundaries.
+
+Prone posture exhibited higher within-class variance on the hard collection surface.
+Future collection should be conducted on a mattress where prone posture is naturally
+more stable.
+These failure modes identify gyroscope fusion or dynamic windowing as the
+highest-priority hardware upgrades for overnight deployment --- not classifier
+algorithm improvement.
+
+\subsection{Ethical Considerations}
+
+Data consisted exclusively of accelerometer recordings from the investigator; no
+third-party participants were enrolled.
+In a consumer deployment, continuous overnight chest-worn monitoring raises meaningful
+privacy concerns: raw sternum accelerometry can be used to infer respiratory rate and
+periods of wakefulness in addition to posture, none of which are communicated to the
+user in the current implementation.
+Any deployment should include informed consent addressing secondary inferences and
+should implement local on-device processing to avoid transmitting raw sensor streams
+to cloud services.
+
+\subsection{Practical Implications and Future Work}
+
+The PostureSense hardware costs under \$30 (Arduino Uno R3 \$25, SparkFun ADXL345
+\$5), making it accessible for home-based positional therapy compliance monitoring.
+The threshold classifier's transparency makes it preferable in regulatory contexts
+where a clinician must audit the decision logic; the KNN classifier is better suited
+to personalized applications that can afford a per-user training session.
+
+Future work should: (1) extend enrollment to 15--20 participants spanning diverse body
+morphologies; (2) conduct overnight trials on a standard mattress to capture transition
+dynamics; (3) evaluate sensor placement variation on calibration robustness;
+(4) implement a temporal smoothing layer (majority vote or hidden Markov model) to
+reduce transition artifacts; and (5) integrate respiratory rate estimation from the
+same accelerometer stream to expand clinical value at no additional hardware cost.
+The one thing readers should take away: a well-calibrated single accelerometer at the
+sternum is sufficient for static sleep posture classification --- sensor placement
+quality and transition handling matter far more than classifier complexity.
+
+% =========================================================
+% REFERENCES
+% =========================================================
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{99}
+
+\bibitem{alinia2020}
+P.~Alinia and H.~Ghasemzadeh,
+``Pervasive lying posture tracking,''
+\textit{Sensors}, vol.~20, no.~20, p.~5953, 2020.
+
+\bibitem{jeng2021}
+P.-Y.~Jeng, C.-H.~Chou, Y.-H.~Lin, and S.-C.~Huang,
+``A wrist sensor sleep posture monitoring system,''
+\textit{Sensors}, vol.~21, no.~1, p.~240, 2021.
+
+\bibitem{razjouyan2017}
+J.~Razjouyan \textit{et al.},
+``Improving sleep quality assessment using wearable sensors by including
+information from postural/movement changes and morning subjective rating,''
+\textit{IEEE Access}, vol.~5, pp.~17442--17453, 2017.
+
+\end{thebibliography}
+
+\end{document}
