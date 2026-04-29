@@ -1,0 +1,92 @@
+\documentclass[journal]{IEEEtran}
+
+\usepackage{cite}
+\usepackage{amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\title{Accelerometer-Based Wearable System for Posture Classification}
+
+\author{
+Hari Krishna Koneti
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This study presents the design and evaluation of a low-cost wearable system for human posture classification using tri-axial accelerometer data. The system utilizes an Arduino-based platform with an ADXL345 sensor to classify four static body positions: supine, prone, left lateral, and right lateral. Experimental results demonstrate that simple feature extraction techniques can effectively distinguish between these postures under controlled conditions. The findings highlight both the potential and limitations of accelerometer-only systems for wearable health monitoring applications.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Wearable computing, accelerometer, posture classification, Arduino, activity recognition
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+Wearable computing has emerged as a key technology in health monitoring, enabling continuous tracking of human activity and physiological states. Accelerometer-based systems are widely used due to their low cost, energy efficiency, and ease of integration. However, many commercial wearable devices lack transparency in their classification methods and may struggle to accurately detect detailed posture variations.
+
+This work focuses on the development of a wearable system for posture classification using tri-axial accelerometer data. The goal is to evaluate whether simple, interpretable methods can accurately distinguish between static body positions in a controlled setting.
+
+\section{Methods}
+
+\subsection{Wearable System}
+The wearable device consists of an Arduino microcontroller connected to an ADXL345 accelerometer using the I\textsuperscript{2}C interface. The sensor measures acceleration along three axes (x, y, z), capturing orientation-dependent gravitational components.
+
+\subsection{Data Collection}
+Data was collected from a single subject under controlled conditions. Four postures were recorded:
+\begin{itemize}
+    \item Supine
+    \item Prone
+    \item Left lateral
+    \item Right lateral
+\end{itemize}
+
+Each posture was maintained for a fixed duration to ensure consistency and reduce variability.
+
+\subsection{Feature Extraction}
+Basic statistical features were extracted from the accelerometer data, including mean values along each axis. These features reflect orientation changes and provide a basis for classification.
+
+\subsection{Classification Approach}
+A simple threshold-based classification method was used to distinguish between postures based on dominant axis values.
+
+\section{Analysis}
+
+The collected data shows clear separation between posture classes due to the influence of gravity on different axes. For example, supine and prone positions exhibit distinct patterns in the z-axis, while lateral positions are differentiated by x-axis variations.
+
+The simplicity of the classification approach allows for real-time implementation and low computational overhead, making it suitable for embedded systems.
+
+\section{Discussion of Findings}
+
+This study investigated the feasibility of a low-cost wearable system for posture classification using tri-axial accelerometer data. The results indicate that static body positions—specifically supine, prone, left lateral, and right lateral—can be effectively distinguished using simple features derived from acceleration signals. The primary factor enabling classification is the consistent shift in the gravitational acceleration vector across the x, y, and z axes, which produces distinguishable patterns for each posture. These findings align with prior research in wearable sensing, where orientation-based features have been shown to be highly effective for static activity recognition \cite{ref1,ref2}.
+
+A key insight from this work is that accurate posture classification does not necessarily require complex machine learning models in controlled environments. Instead, threshold-based or rule-based methods can achieve reliable performance while maintaining interpretability and low computational cost. This is particularly important for embedded systems, where power efficiency and real-time processing are critical constraints. The ability to implement lightweight classification approaches makes this system suitable for wearable applications with limited hardware resources.
+
+However, when compared to state-of-the-art systems, several limitations become apparent. Modern wearable solutions often rely on multi-sensor fusion, integrating accelerometers with gyroscopes or magnetometers to improve robustness under dynamic conditions \cite{ref3}. In contrast, the current system relies solely on accelerometer data, which makes it sensitive to motion artifacts, sensor misalignment, and external disturbances. As a result, the proposed approach is most effective in controlled or quasi-static scenarios and may not generalize well to free-living environments without further enhancement.
+
+Another important limitation of this study is the use of a single-subject dataset. While this approach ensures experimental control and repeatability, it restricts the generalizability of the findings. Differences in body structure, movement patterns, and sensor placement across individuals can significantly influence accelerometer signals. Prior work highlights inter-subject variability as a major challenge in wearable computing \cite{ref4}. Therefore, future studies should include multiple participants to validate the robustness of the proposed system.
+
+Despite these limitations, this project contributes a complete and reproducible pipeline for wearable-based posture classification. The integration of hardware design, controlled data collection, feature extraction, and analysis demonstrates an end-to-end system suitable for practical deployment. Furthermore, the simplicity and cost-effectiveness of the system make it attractive for applications such as sleep monitoring and home-based health assessment.
+
+Future work will focus on improving robustness and scalability. This includes incorporating additional sensors, implementing machine learning algorithms, and collecting real-world data to evaluate performance under unconstrained conditions. Adaptive calibration techniques will also be explored to improve generalization across users.
+
+In conclusion, this study demonstrates that accelerometer-based wearable systems can effectively classify body posture in controlled conditions using simple and interpretable methods. While limitations exist, the findings provide a strong foundation for future research in wearable health monitoring systems.
+
+\section{Conclusion}
+
+This work demonstrates the feasibility of using a low-cost accelerometer-based wearable system for posture classification. The results show that simple features can effectively distinguish between static postures, highlighting the potential of lightweight embedded solutions. Future work will expand on this foundation to improve robustness and scalability.
+
+\begin{thebibliography}{00}
+
+\bibitem{ref1} S. Patel et al., “A review of wearable sensors and systems with application in rehabilitation,” \textit{J. NeuroEngineering Rehabil.}, 2012.
+
+\bibitem{ref2} L. Bao and S. S. Intille, “Activity recognition from user-annotated acceleration data,” \textit{Pervasive Computing}, 2004.
+
+\bibitem{ref3} O. D. Lara and M. A. Labrador, “A survey on human activity recognition using wearable sensors,” \textit{IEEE Commun. Surveys}, 2013.
+
+\bibitem{ref4} J. Yang et al., “Using accelerometers for physical activity recognition in free-living settings,” \textit{IEEE Trans. Biomed. Eng.}, 2015.
+
+\end{thebibliography}
+
+\end{document}
